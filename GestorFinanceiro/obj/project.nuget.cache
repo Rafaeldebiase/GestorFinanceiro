@@ -1,11 +1,15 @@
 {
   "version": 2,
-  "dgSpecHash": "AUn7K7Jo53l/rk0eaILTgWtQDT+/GF/FDMAcJtRClK0hl7G2/vOpOhQKKdnTT3twchqV87NLC9EQo6r3EAYD3g==",
+  "dgSpecHash": "KvciF/1/h5GhP0Z2IIJK2wH/PCtJOktbKq64W91kGPHSNUoioXiuVkQXAOf3gQooK1rOP6HKlQ9MyzobPCJw3A==",
   "success": true,
   "projectFilePath": "C:\\Users\\rafae\\source\\repos\\faculdade\\GestorFinanceiro\\GestorFinanceiro\\GestorFinanceiro.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\rafae\\.nuget\\packages\\fluentvalidation\\10.3.3\\fluentvalidation.10.3.3.nupkg.sha512",
+    "C:\\Users\\rafae\\.nuget\\packages\\microsoft.aspnetcore.jsonpatch\\5.0.10\\microsoft.aspnetcore.jsonpatch.5.0.10.nupkg.sha512",
+    "C:\\Users\\rafae\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
     "C:\\Users\\rafae\\.nuget\\packages\\microsoft.extensions.apidescription.server\\3.0.0\\microsoft.extensions.apidescription.server.3.0.0.nupkg.sha512",
     "C:\\Users\\rafae\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
+    "C:\\Users\\rafae\\.nuget\\packages\\newtonsoft.json\\12.0.2\\newtonsoft.json.12.0.2.nupkg.sha512",
     "C:\\Users\\rafae\\.nuget\\packages\\swashbuckle.aspnetcore\\5.6.3\\swashbuckle.aspnetcore.5.6.3.nupkg.sha512",
     "C:\\Users\\rafae\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\5.6.3\\swashbuckle.aspnetcore.swagger.5.6.3.nupkg.sha512",
     "C:\\Users\\rafae\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\5.6.3\\swashbuckle.aspnetcore.swaggergen.5.6.3.nupkg.sha512",

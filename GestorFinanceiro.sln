@@ -3,13 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31410.357
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GestorFinanceiro", "GestorFinanceiro\GestorFinanceiro.csproj", "{D2FFC876-9D15-4818-91B0-BB2FD18AE388}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GestorFinanceiro", "GestorFinanceiro\GestorFinanceiro.csproj", "{D2FFC876-9D15-4818-91B0-BB2FD18AE388}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{F116CFCF-F0FD-4E38-A545-5B15A9B9DC97}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{F116CFCF-F0FD-4E38-A545-5B15A9B9DC97}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", "{CC4C85B2-3D0F-4D8C-8B90-05FA2AD325B4}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Business", "Business\Business.csproj", "{47F57705-B190-48EB-80D9-4925F6453802}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data", "Data\Data.csproj", "{CC4C85B2-3D0F-4D8C-8B90-05FA2AD325B4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +27,6 @@ Global
 		{CC4C85B2-3D0F-4D8C-8B90-05FA2AD325B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC4C85B2-3D0F-4D8C-8B90-05FA2AD325B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CC4C85B2-3D0F-4D8C-8B90-05FA2AD325B4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{47F57705-B190-48EB-80D9-4925F6453802}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{47F57705-B190-48EB-80D9-4925F6453802}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{47F57705-B190-48EB-80D9-4925F6453802}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{47F57705-B190-48EB-80D9-4925F6453802}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

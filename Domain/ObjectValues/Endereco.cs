@@ -37,5 +37,23 @@ namespace Domain.ObjectValues
         public string Estado { get; private set; }
         public string Pais { get; private set; }
         public string Cep { get; private set; }
+
+        public override bool Equals(object obj)
+        {
+            return obj is Endereco endereco &&
+                   Logradouro == endereco.Logradouro &&
+                   Numero == endereco.Numero &&
+                   Complemento == endereco.Complemento &&
+                   Bairro == endereco.Bairro &&
+                   Cidade == endereco.Cidade &&
+                   Estado == endereco.Estado &&
+                   Pais == endereco.Pais &&
+                   Cep == endereco.Cep;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Logradouro, Numero, Complemento, Bairro, Cidade, Estado, Pais, Cep);
+        }
     }
 }

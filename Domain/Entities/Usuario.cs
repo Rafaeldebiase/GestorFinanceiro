@@ -4,13 +4,13 @@ using System;
 
 namespace Domain.Entities
 {
-    public class Usuário
+    public class Usuario
     {
-        public Usuário(
+        public Usuario(
             NomeCompleto nomeCompleto,
             Email email,
             Senha senha,
-            string idade,
+            DateTime dataNascimento,
             Genero genero,
             Endereco endereco
            )
@@ -19,7 +19,7 @@ namespace Domain.Entities
             NomeCompleto = nomeCompleto;
             Email = email;
             Senha = senha;
-            Idade = idade;
+            DataNascimento = dataNascimento;
             Genero = genero;
             Endereco = endereco;
             Ativo = false;
@@ -29,7 +29,7 @@ namespace Domain.Entities
         public NomeCompleto NomeCompleto { get; private set; }
         public Email Email { get; private set; }
         public Senha Senha { get; private set; }
-        public string Idade { get; private set; }
+        public DateTime DataNascimento { get; private set; }
         public Genero Genero { get; private set; }
         public Endereco Endereco { get; private set; }
         public bool Ativo { get; private set; }
@@ -37,6 +37,21 @@ namespace Domain.Entities
         public void Ativar()
         {
             Ativo = true;
+        }
+
+        public void AlteraDataNascimento(DateTime dataNascimento)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AlterarNome(NomeCompleto nome)
+        {
+            NomeCompleto = nome;
+        }
+
+        public void AlterarEndereco(Endereco end)
+        {
+            Endereco = end;
         }
     }
 }
