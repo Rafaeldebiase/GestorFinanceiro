@@ -1,8 +1,16 @@
 {
   "version": 2,
-  "dgSpecHash": "WZiF8XMZ2oy6GyS4xSZS2VWPx+kh4wM0vPcQ0V9etoobNJbrB0SKHYLcGBJibL83SsCg7Cb5ulBdXyBLDgaHig==",
+  "dgSpecHash": "Bgyon0oe69v5/qtNa1JyGdusFy1N9z1mdq1Vz0jPo8XYlxvmLOOxZieLAfkKJ0uh6ujCjDLEXHuNZiEnNJ5Qgw==",
   "success": true,
   "projectFilePath": "C:\\Users\\rafae\\source\\repos\\faculdade\\GestorFinanceiro\\Data\\Data.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\rafae\\.nuget\\packages\\dapper\\2.0.90\\dapper.2.0.90.nupkg.sha512",
+    "C:\\Users\\rafae\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\5.0.0\\microsoft.extensions.configuration.abstractions.5.0.0.nupkg.sha512",
+    "C:\\Users\\rafae\\.nuget\\packages\\microsoft.extensions.configuration.binder\\5.0.0\\microsoft.extensions.configuration.binder.5.0.0.nupkg.sha512",
+    "C:\\Users\\rafae\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\5.0.0\\microsoft.extensions.logging.abstractions.5.0.0.nupkg.sha512",
+    "C:\\Users\\rafae\\.nuget\\packages\\microsoft.extensions.primitives\\5.0.0\\microsoft.extensions.primitives.5.0.0.nupkg.sha512",
+    "C:\\Users\\rafae\\.nuget\\packages\\npgsql\\5.0.10\\npgsql.5.0.10.nupkg.sha512",
+    "C:\\Users\\rafae\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\4.6.0\\system.runtime.compilerservices.unsafe.4.6.0.nupkg.sha512"
+  ],
   "logs": []
 }

@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  finance-postgres:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: "Postgres2021!"
+    ports:
+      - "15432:5432"
+    volumes:
+      - /home/rafae/source/repos/faculdade/GestorFinanceiro/PostgreSQL:/var/lib/postgresql/data 
+    networks:
+      - finance-postgres-network
+      
+  finance-pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "rafaelvitaldebiase@gmail.com"
+      PGADMIN_DEFAULT_PASSWORD: "PgAdmin2021!"
+    ports:
+      - "16543:80"
+    depends_on:
+      - finance-postgres
+    networks:
+      - finance-postgres-network
+
+networks: 
+  finance-postgres-network:
+    driver: bridge

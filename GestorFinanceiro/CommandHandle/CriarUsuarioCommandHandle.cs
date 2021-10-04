@@ -3,8 +3,11 @@ using Domain.Entities;
 using Domain.Enums;
 using Domain.ObjectValues;
 using GestorFinanceiro.Commands;
-using GestorFinanceiro.Interfaces;
+using GestorFinanceiro.ICommandHandle;
+using GestorFinanceiro.Services;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Threading.Tasks;
 
 namespace GestorFinanceiro.CommandHandle
 {
@@ -12,53 +15,105 @@ namespace GestorFinanceiro.CommandHandle
     {
         private readonly IUsuarioRepository _repository;
         private readonly ILogger<CriarUsuarioCommandHandle> _logger;
+        private readonly IEnvioDeEmailService _envioDeEmailService;
 
-        public CriarUsuarioCommandHandle(IUsuarioRepository repository, ILogger<CriarUsuarioCommandHandle> logger)
+        public CriarUsuarioCommandHandle(IUsuarioRepository repository, ILogger<CriarUsuarioCommandHandle> logger,
+            IEnvioDeEmailService envioDeEmailService)
         {
             _repository = repository;
-            this._logger = logger;
+            _logger = logger;
+            _envioDeEmailService = envioDeEmailService;
         }
-        public void CriarCommand(CriarUsuarioCommand command)
+
+        public async Task<bool> Criar(CriarUsuarioCommand command)
         {
-            var nomeCompleto = CriarNomeCompleto(command);
-            var email = CriarEmail(command);
-            var senha = CriarSenha(command);
+            try
+            {
+                var emailEnviado = false;
+                var resultado = false;
+                var codigo = new GeradorDeCodigo().Generator();
+
+                emailEnviado = _envioDeEmailService.Enviar(command.Email, codigo, command.PrimeiroNome);
+
+                if (emailEnviado)
+                {
+                    var usuario = CriarUsuario(command);
+                    usuario.InserirCodigoDeAtivacao(codigo);
+                    resultado = await _repository.CriarUsuarioAsync(usuario);
+                    return resultado;
+
+                }
+
+                return resultado;
+            }
+            catch (Exception error)
+            {
+                _logger.LogError($"{error.InnerException} :: {error.Message}");
+                throw;
+            }
+           
+        }
+
+        private Usuario CriarUsuario(CriarUsuarioCommand command)
+        {
+            var nomeCompleto = CriarNomeCompleto(command.PrimeiroNome, command.UltimoNome);
+            var email = CriarEmail(command.Email);
+            var senha = CriarSenha(command.Senha);
             var endereco = CriarEndereco(command);
+            var genero = CriarGenero(command.Genero);
+            var dataNascimento = CriarDataNascimento(command.DataNascimento);
             var usuario = new Usuario(
                     nomeCompleto,
                     email,
                     senha,
-                    command.DataNascimento,
-                    (Genero)command.Genero,
+                    dataNascimento,
+                    genero,
                     endereco
                 );
 
-            _repository.CriarUsuario(usuario);
-
+            return usuario;
         }
 
-        private NomeCompleto CriarNomeCompleto(CriarUsuarioCommand command) =>
-            new NomeCompleto(command.PrimeiroNome, command.UltimoNome);
+        private Senha CriarSenha(string senha) =>
+            new Senha(senha);
 
-        private Email CriarEmail(CriarUsuarioCommand command) =>
-            new Email(command.Email);
+        private DateTime? CriarDataNascimento(DateTime? dataNascimento)
+        {
+            if (dataNascimento == null) return null;
 
-        private Senha CriarSenha(CriarUsuarioCommand command) =>
-            new Senha(command.Senha);
+            return dataNascimento;
+        }
 
-        private Endereco CriarEndereco(CriarUsuarioCommand command) =>
-            new Endereco(
-                command.Logradouro,
-                command.Numero,
-                command.Complemento,
-                command.Bairro,
-                command.Cidade,
-                command.Estado,
-                command.Pais,
-                command.Cep
-                );
+        private Genero CriarGenero(int? genero)
+        {
+            switch (genero)
+            {
+                case 0:
+                    return Genero.MASCULINO;
+                case 1:
+                    return Genero.FEMININO;
+                default:
+                    return Genero.NAO_INFORMADO;
+            }
+        }
 
-        
+        private static NomeCompleto CriarNomeCompleto(string primeiroNome, string ultimoNome) =>
+          new NomeCompleto(primeiroNome, ultimoNome);
+
+        private static Email CriarEmail(string address) =>
+            new Email(address);
+
+        private static Endereco CriarEndereco(CriarUsuarioCommand command) =>
+          new Endereco(
+              command.Logradouro,
+              command.Numero,
+              command.Complemento,
+              command.Bairro,
+              command.Cidade,
+              command.Estado,
+              command.Pais,
+              command.Cep
+              );
 
     }
 }

@@ -1,8 +1,12 @@
-﻿using Data.Interfaces;
+﻿using Data.Dto;
+using Data.Interfaces;
 using Domain.Entities;
+using Domain.Enums;
 using Domain.ObjectValues;
 using GestorFinanceiro.Commands;
 using GestorFinanceiro.ICommandHandle;
+using System;
+using System.Threading.Tasks;
 
 namespace GestorFinanceiro.CommandHandle
 {
@@ -17,72 +21,70 @@ namespace GestorFinanceiro.CommandHandle
 
         public Usuario Usuario { get; private set; }
 
-        public void EditarCommand(EditarUsuarioCommand command)
+        public async Task<bool> EditarCommand(EditarUsuarioCommand command, string id)
         {
-            Usuario = _repository.BuscarUsuario(command.Email);
+            Usuario = CriarUsuario(command, id);
 
-            VerificaNomeCompleto(command);
-            VerificaEndereco(command);
-            VerificaDataNascimento(command);
+            return await _repository.Editar(Usuario);
+        }
 
+        private Usuario CriarUsuario(EditarUsuarioCommand command, string id)
+        {
+            var nomeCompleto = CriarNomeCompleto(command.PrimeiroNome, command.UltimoNome);
+            var email = CriarEmail(command.Email);
+            var endereco = CriarEndereco(command);
+            var genero = CriarGenero(command.Genero);
+            var dataNascimento = CriarDataNascimento(command.DataNascimento);
 
+            var usuario = new Usuario(
+                    Guid.Parse(id),
+                    nomeCompleto,
+                    email,
+                    dataNascimento,
+                    genero,
+                    endereco
+                ); 
 
-
+            return usuario;
 
         }
 
-        private void VerificaDataNascimento(EditarUsuarioCommand command)
+        private Genero CriarGenero(int? genero)
         {
-            if(Usuario.DataNascimento != command.DataNascimento)
+            switch (genero)
             {
-                Usuario.AlteraDataNascimento(command.DataNascimento);
+                case 0:
+                    return Genero.MASCULINO;
+                case 1:
+                    return Genero.FEMININO;
+                default:
+                    return Genero.NAO_INFORMADO;
             }
         }
 
-        private void VerificaEndereco(EditarUsuarioCommand command)
+        private DateTime? CriarDataNascimento(DateTime? dataNascimento)
         {
-            var endereco = new
-            {
-                Logradouro = command.Logradouro,
-                Numero = command.Numero,
-                Complemento = command.Complemento,
-                Bairro = command.Bairro,
-                Cidade = command.Cidade,
-                Estado = command.Estado,
-                Pais = command.Pais,
-                Cep = command.Cep
-            };
+            if (dataNascimento == null) return null;
 
-            if(!Usuario.Endereco.Equals(endereco))
-            {
-                var end = new Endereco(
-                        endereco.Logradouro,
-                        endereco.Numero,
-                        endereco.Complemento,
-                        endereco.Bairro,
-                        endereco.Cidade,
-                        endereco.Estado,
-                        endereco.Pais,
-                        endereco.Cep
-                    );
-
-                Usuario.AlterarEndereco(end);
-            }
+            return dataNascimento;
         }
 
-        private void VerificaNomeCompleto(EditarUsuarioCommand command)
-        {
-            var nomeCompleto = new
-            {
-                PrimeiroNome = command.PrimeiroNome,
-                UltimoNome = command.UltimoNome
-            };
+        private static NomeCompleto CriarNomeCompleto(string primeiroNome, string ultimoNome) =>
+            new NomeCompleto(primeiroNome, ultimoNome);
 
-            if (!Usuario.NomeCompleto.Equals(nomeCompleto))
-            {
-                var nome = new NomeCompleto(nomeCompleto.PrimeiroNome, nomeCompleto.UltimoNome);
-                Usuario.AlterarNome(nome);
-            }
-        }
+        private static Email CriarEmail(string address) =>
+            new Email(address);
+
+        private static Endereco CriarEndereco(EditarUsuarioCommand command) =>
+            new Endereco(
+                command.Logradouro,
+                command.Numero,
+                command.Complemento,
+                command.Bairro,
+                command.Cidade,
+                command.Estado,
+                command.Pais,
+                command.Cep
+                );
     }
 }

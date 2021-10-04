@@ -1,9 +1,7 @@
-﻿]using FluentValidation.Results;
+﻿using FluentValidation.Results;
 using GestorFinanceiro.Validators;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace GestorFinanceiro.Commands
 {
@@ -12,10 +10,10 @@ namespace GestorFinanceiro.Commands
         public string PrimeiroNome { get; set; }
         public string UltimoNome { get; set; }
         public string Email { get; set; }
-        public DateTime DataNascimento { get; set; }
-        public int Genero { get; set; }
+        public DateTime? DataNascimento { get; set; }
+        public int? Genero { get; set; }
         public string Logradouro { get; set; }
-        public int Numero { get; set; }
+        public int? Numero { get; set; }
         public string Complemento { get; set; }
         public string Bairro { get; set; }
         public string Cidade { get; set; }

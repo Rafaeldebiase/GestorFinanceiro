@@ -1,11 +1,12 @@
-﻿using Data.Interfaces;
+﻿using Data.Dto;
+using Data.Interfaces;
 using GestorFinanceiro.Commands;
 using GestorFinanceiro.ICommandHandle;
-using GestorFinanceiro.Interfaces;
-using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace GestorFinanceiro.Controllers
@@ -22,14 +23,16 @@ namespace GestorFinanceiro.Controllers
             _repository = repository;
         }
 
-        [HttpGet("buscar")]
-        public int Buscar(string email)
+        [HttpGet]
+        [Authorize(Roles = "ADMINISTRADOR")]
+        public async Task<IEnumerable<UsuarioDto>> BuscarTodos()
         {
-            return 1;
+            return await _repository.BuscarTodos();
         }
 
         [HttpPost("criar")]
-        public ActionResult InserirAsync([FromBody]CriarUsuarioCommand command, 
+        [AllowAnonymous]
+        public async Task<ActionResult> InserirAsync([FromBody]CriarUsuarioCommand command, 
             [FromServices]ICriarUsuarioCommandHandle handle)
         {
             try
@@ -40,15 +43,18 @@ namespace GestorFinanceiro.Controllers
                     return BadRequest(command.RetornaErros());
                 }
                     
-                if (_repository.UsuarioExistente(command.Email))
+                if (await _repository.UsuarioExistente(command.Email))
                 {
                     _logger.LogInformation($"Usuário com email: {command.Email} já está cadastrado");
                     return BadRequest($"Usuário com email: {command.Email} já está cadastrado");
                 }
 
-                handle.CriarCommand(command);
+                var resultado = await handle.Criar(command);
 
-                return Ok();
+                return resultado == true ? 
+                    StatusCode(201) : 
+                    BadRequest($"Não foi possível criar o usuário");
+                
             }
             catch (Exception error)
             {
@@ -58,8 +64,9 @@ namespace GestorFinanceiro.Controllers
             
         }
 
-        [HttpPatch("editar/{email}")]
-       public ActionResult Editar([FromBody]EditarUsuarioCommand command, [FromServices]IEditarUsuarioCommandHandle handle)
+       [HttpPatch("editar")]
+       [Authorize]
+        public async Task<ActionResult> Editar([FromBody]EditarUsuarioCommand command, [FromServices]IEditarUsuarioCommandHandle handle)
         {
             try
             {
@@ -69,15 +76,13 @@ namespace GestorFinanceiro.Controllers
                     return BadRequest(command.RetornaErros());
                 }
 
-                if (!_repository.UsuarioExistente(command.Email))
-                {
-                    _logger.LogInformation($"Usuário com email: {command.Email} não está cadastrado");
-                    return BadRequest($"Usuário com email: {command.Email} não está cadastrado");
-                }
+                var id = User.Identity.Name;
 
-                handle.EditarCommand(command);
+                var retorno = await handle.EditarCommand(command, id);
 
-                return Ok();
+                if(retorno) return Ok();
+
+                return BadRequest();
 
             }
             catch (Exception error)
@@ -85,9 +90,58 @@ namespace GestorFinanceiro.Controllers
                 _logger.LogError($"{error.InnerException} :: {error.Message}");
                 throw new Exception(error.Message);
             }
+        }
 
-                
-            
+        [HttpDelete("excluir/{email}")]
+        [Authorize]
+        public async  Task<ActionResult> Excluir(ExcluirUsuarioCommand command, [FromServices]IExcuirUsuarioCommandHandle handle)
+        {
+            try
+            {
+                if (!await _repository.UsuarioExistente(command.Email))
+                {
+                    _logger.LogInformation($"Usuário com email: {command.Email} não está cadastrado");
+                    return BadRequest($"Usuário com email: {command.Email} não está cadastrado");
+                }
+
+                handle.Excluir(command);
+
+                return Ok();
+            }
+            catch (Exception error)
+            {
+                _logger.LogError($"{error.InnerException} :: {error.Message}");
+                throw new Exception(error.Message);
+            }
+        }
+
+        [HttpPatch("ativar")]
+        [AllowAnonymous]
+        public async Task<ActionResult> Ativar([FromBody]AtivarUsuarioCommand command, [FromServices]IAtivarUsuarioCommandHandle handle)
+        {
+            try
+            {
+                if (!await _repository.UsuarioExistente(command.Email))
+                {
+                    _logger.LogInformation($"Usuário não está cadastrado");
+                    return BadRequest($"Usuário não está cadastrado");
+                }
+
+                if (command.CodigoDeAtivacao == 0)
+                {
+                    _logger.LogInformation($"O código de ativação não foi informado");
+                    return BadRequest($"O código de ativação não foi informado");
+                }
+
+                await handle.Ativar(command);
+
+                return Ok();
+            }
+            catch (Exception error)
+            {
+                _logger.LogError($"{error.InnerException} :: {error.Message}");
+                throw new Exception(error.Message);
+            }
         }
     }
 }

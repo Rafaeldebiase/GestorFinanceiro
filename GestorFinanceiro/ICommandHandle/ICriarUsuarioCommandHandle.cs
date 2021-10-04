@@ -1,9 +1,10 @@
 ﻿using GestorFinanceiro.Commands;
+using System.Threading.Tasks;
 
-namespace GestorFinanceiro.Interfaces
+namespace GestorFinanceiro.ICommandHandle
 {
     public interface ICriarUsuarioCommandHandle
     {
-        void CriarCommand(CriarUsuarioCommand command);
+        Task<bool> Criar(CriarUsuarioCommand command);
     }
 }

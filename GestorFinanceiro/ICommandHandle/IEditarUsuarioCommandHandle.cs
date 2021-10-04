@@ -1,9 +1,11 @@
 ﻿using GestorFinanceiro.Commands;
+using System;
+using System.Threading.Tasks;
 
 namespace GestorFinanceiro.ICommandHandle
 {
     public interface IEditarUsuarioCommandHandle
     {
-        void EditarCommand(EditarUsuarioCommand command);
+        Task<bool> EditarCommand(EditarUsuarioCommand command, string id );
     }
 }
